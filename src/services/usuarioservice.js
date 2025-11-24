@@ -8,6 +8,17 @@ export default {
       const response = await axios.post(`${API_URL}/users`,usua)
       
 
+  },
+
+  async alluser(){
+      const response = await axios.post(`${API_URL}/users`)
+      return response
+  },
+
+  async delete(id){
+      const response = await axios.delete(`${API_URL}/users`,id)
+      return response
   }
+
 }
     

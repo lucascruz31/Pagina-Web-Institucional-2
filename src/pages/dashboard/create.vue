@@ -10,8 +10,10 @@
                 <v-card-text>
                 <v-form>
                  <UsuarioApp></UsuarioApp>
+                 
                 </v-form>
-
+                
+                <ListadoUsers></ListadoUsers>
                 <!-- Información de usuarios de prueba -->
                 <v-divider class="my-6" />
                 
