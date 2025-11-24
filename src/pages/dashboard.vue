@@ -88,6 +88,12 @@
 		enlace : '/dashboard/matriculas',
 
     },
+    {
+		icono : 'mdi-inbox-arrow-down', 
+		titulo : 'Crear Usuario',
+		enlace : '/dashboard/create',
+
+    },
   ]
 
   const drawer = ref(null)
