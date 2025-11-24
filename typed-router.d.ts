@@ -19,7 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/dashboard': RouteRecordInfo<'/dashboard', '/dashboard', Record<never, never>, Record<never, never>, '/dashboard/Overview' | '/dashboard/Stats' | '/dashboard/matriculas'>,
+    '/dashboard': RouteRecordInfo<'/dashboard', '/dashboard', Record<never, never>, Record<never, never>, '/dashboard/Overview' | '/dashboard/Stats' | '/dashboard/create' | '/dashboard/matriculas'>,
+    '/dashboard/create': RouteRecordInfo<'/dashboard/create', '/dashboard/create', Record<never, never>, Record<never, never>>,
     '/dashboard/matriculas': RouteRecordInfo<'/dashboard/matriculas', '/dashboard/matriculas', Record<never, never>, Record<never, never>>,
     '/dashboard/Overview': RouteRecordInfo<'/dashboard/Overview', '/dashboard/Overview', Record<never, never>, Record<never, never>>,
     '/dashboard/Stats': RouteRecordInfo<'/dashboard/Stats', '/dashboard/Stats', Record<never, never>, Record<never, never>>,
@@ -41,8 +42,12 @@ declare module 'vue-router/auto-routes' {
       views: never
     }
     'src/pages/dashboard.vue': {
-      routes: '/dashboard' | '/dashboard/matriculas' | '/dashboard/Overview' | '/dashboard/Stats'
+      routes: '/dashboard' | '/dashboard/create' | '/dashboard/matriculas' | '/dashboard/Overview' | '/dashboard/Stats'
       views: 'default'
+    }
+    'src/pages/dashboard/create.vue': {
+      routes: '/dashboard/create'
+      views: never
     }
     'src/pages/dashboard/matriculas.vue': {
       routes: '/dashboard/matriculas'

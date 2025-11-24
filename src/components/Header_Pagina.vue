@@ -40,168 +40,106 @@
 </script>
 
 <style scoped>
+/* Layout */
 .custom-header {
-  background: linear-gradient(135deg, #e3f2fd 0%, #f5fbff 50%, #ffffff 100%) !important;
-  border-bottom: 3px solid #b3e5fc !important;
-  box-shadow: 0 4px 20px rgba(179, 229, 252, 0.4) !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.custom-header::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #4FC3F7, #0288D1, #4FC3F7);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0%, 100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  background: linear-gradient(90deg, #e8f4fb 0%, #ffffff 100%);
+  border-bottom: 1px solid rgba(2, 136, 209, 0.12);
+  box-shadow: 0 6px 18px rgba(2, 136, 209, 0.06);
+  height: auto;
 }
 
 .header-logo {
-  filter: drop-shadow(0 2px 8px rgba(2, 136, 209, 0.3));
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 2;
+  max-width: 96px;
+  width: 96px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
-.header-logo:hover {
-  transform: scale(1.05) rotate(2deg);
-  filter: drop-shadow(0 4px 12px rgba(2, 136, 209, 0.5));
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .header-title {
+  flex: 1 1 auto;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  flex: 1;
+  text-align: center;
 }
 
 .title-content {
-  text-align: center;
-  padding: 0 20px;
+  padding: 0 8px;
 }
 
 .institution-name {
-  color: #01579B;
-  font-size: 1.5rem;
+  color: #023e6b;
+  font-size: 1.15rem;
   font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 4px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 1.1;
 }
 
 .institution-subtitle {
-  color: #0288D1;
-  font-size: 1.1rem;
+  color: #0277bd;
+  font-size: 0.95rem;
   font-weight: 500;
   font-style: italic;
-  line-height: 1.2;
 }
 
+/* Login button */
 .login-btn {
-  background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%) !important;
-  color: white !important;
-  border-radius: 25px !important;
-  padding: 10px 20px !important;
+  --btn-bg-1: #18a0ff;
+  --btn-bg-2: #0277bd;
+  background: linear-gradient(135deg, var(--btn-bg-1), var(--btn-bg-2)) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  padding: 8px 16px !important;
   font-weight: 600 !important;
   text-transform: none !important;
-  box-shadow: 0 4px 12px rgba(2, 136, 209, 0.3) !important;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-  border: 2px solid rgba(255, 255, 255, 0.8) !important;
-  position: relative;
-  overflow: hidden;
-  z-index: 2;
-}
-
-.login-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.5s ease;
-}
-
-.login-btn:hover::before {
-  left: 100%;
+  box-shadow: 0 6px 18px rgba(2, 119, 189, 0.18) !important;
+  transition: transform 160ms ease, box-shadow 160ms ease !important;
 }
 
 .login-btn:hover {
-  background: linear-gradient(135deg, #0288D1 0%, #01579B 100%) !important;
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(2, 136, 209, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(2, 119, 189, 0.22) !important;
 }
 
 .login-btn :deep(.v-icon) {
-  transition: transform 0.3s ease !important;
+  margin-right: 6px;
 }
 
-.login-btn:hover :deep(.v-icon) {
-  transform: scale(1.1);
+/* Small detail shadow bar */
+.custom-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(24,160,255,0.18), rgba(2,119,189,0.12));
+  pointer-events: none;
 }
 
-/* Responsive */
-@media (max-width: 960px) {
-  .header-title {
-    display: none;
-  }
-  
-  .header-logo {
-    max-width: 90px !important;
-  }
-  
-  .login-btn {
-    padding: 8px 16px !important;
-    font-size: 0.9rem;
-  }
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .institution-name { font-size: 1rem; }
+  .institution-subtitle { font-size: 0.9rem; }
+  .header-logo { max-width: 80px; width: 80px; }
 }
 
 @media (max-width: 600px) {
-  .custom-header {
-    height: 120px !important;
-  }
-  
-  .header-logo {
-    max-width: 80px !important;
-    margin: 12px auto !important;
-  }
-  
-  .login-btn {
-    padding: 6px 12px !important;
-    font-size: 0.8rem;
-  }
-  
-  .login-btn :deep(.v-icon) {
-    font-size: 18px !important;
-    margin-right: 4px !important;
-  }
-}
-
-@media (max-width: 400px) {
-  .header-logo {
-    max-width: 70px !important;
-  }
-  
-  .login-btn {
-    padding: 5px 10px !important;
-    font-size: 0.75rem;
-  }
-  
-  .login-btn :deep(.v-icon) {
-    font-size: 16px !important;
-    margin-right: 2px !important;
-  }
+  .custom-header { padding: 8px 12px; }
+  .header-title { display: none; }
+  .login-btn { padding: 6px 10px !important; }
+  .header-logo { max-width: 64px; width: 64px; }
 }
 </style>

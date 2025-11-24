@@ -1,227 +1,170 @@
 <template>
-    <div>
-        <v-row class="mt-2 d-flex justify-center login-container">
-            <v-col cols="12" md="4" class="fondoimagen">
-              <v-card
-                    class="mx-auto card-left"
-                    elevation="8"
-                    rounded="lg"
-                    >
-              <v-img
-                  class="mx-auto logo-img"
-                   max-width="200px"
-                   src="https://comfacor.com.co/newweb/wp-content/uploads/2022/07/MANUAL-CORPORATIVO-COMFACOR.png"
-               ></v-img>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="7" class="fondo">
-                <v-card
-                    class="mx-auto card-content"
-                    elevation="8"
-                    rounded="lg"
-                    >
-                    <div class="text-subtitle-1 text-medium-emphasis">Account</div>
+  <v-app>
+    <v-main>
+      <v-container fluid class="fill-height">
+        <v-row align="center" justify="center">
+          <v-col>
+            <v-card elevation="8" class="rounded-lg">
+              <v-card-title class="text-h4 text-center py-6 bg-primary">
+                <v-icon size="large" class="mr-2">mdi-lock-outline</v-icon>
+                Iniciar Sesión
+              </v-card-title>
 
-                    <v-text-field
-                        density="compact"
-                        placeholder="Email address"
-                        prepend-inner-icon="mdi-email-outline"
-                        variant="outlined"
-                    ></v-text-field>
+              <v-card-text class="pa-8">
+                <!-- Alerta de error -->
+                <v-alert
+                  v-if="error"
+                  type="error"
+                  variant="tonal"
+                  closable
+                  class="mb-4"
+                  @click:close="error = ''"
+                >
+                  {{ error }}
+                </v-alert>
 
-                    <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-                        Password
+                <!-- Alerta de éxito -->
+                <v-alert
+                  v-if="success"
+                  type="success"
+                  variant="tonal"
+                  class="mb-4"
+                >
+                  {{ success }}
+                </v-alert>
 
-                        <a
-                        class="text-caption text-decoration-none text-blue"
-                        href="#"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        >
-                        Forgot login password?</a>
-                    </div>
+                <v-form @submit.prevent="handleLogin" ref="form">
+                  <!-- Campo de usuario -->
+                  <v-text-field
+                    v-model="username"
+                    label="Usuario"
+                    prepend-inner-icon="mdi-account"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[rules.required]"
+                    class="mb-3"
+                    :disabled="loading"
+                  />
 
-                    <v-text-field
-                        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                        :type="visible ? 'text' : 'password'"
-                        density="compact"
-                        placeholder="Enter your password"
-                        prepend-inner-icon="mdi-lock-outline"
-                        variant="outlined"
-                        @click:append-inner="visible = !visible"
-                    ></v-text-field>
+                  <!-- Campo de contraseña -->
+                  <v-text-field
+                    v-model="password"
+                    label="Contraseña"
+                    prepend-inner-icon="mdi-lock"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append-inner="showPassword = !showPassword"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[rules.required]"
+                    :disabled="loading"
+                  />
 
-                    <v-card
-                        class="mb-4"
-                        color="surface-variant"
-                        variant="tonal"
-                    >
-                        <v-card-text class="text-medium-emphasis text-caption">
-                        Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. If you must login now, you can also click "Forgot login password?" below to reset the login password.
-                        </v-card-text>
-                    </v-card>
+                  <!-- Botón de login -->
+                  <v-btn
+                    type="submit"
+                    color="primary"
+                    size="large"
+                    block
+                    :loading="loading"
+                    class="mt-4"
+                  >
+                    <v-icon left class="mr-2">mdi-login</v-icon>
+                    Ingresar
+                  </v-btn>
+                 
 
-          <v-btn
-            class="mb-4"
-            color="blue"
-            size="large"
-            variant="tonal"
-            block
-            @click="login"
-          >
-            Log In
-          </v-btn>
+                 <UsuarioApp></UsuarioApp>
+                </v-form>
 
-                    <v-card-text class="text-center">
-                        <a
-                        class="text-blue text-decoration-none"
-                        href="#"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        >
-                        Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-                        </a>
-                    </v-card-text>
-                    </v-card>
-
-            </v-col>
+                <!-- Información de usuarios de prueba -->
+                <v-divider class="my-6" />
+                
+                <div class="text-caption text-center text-medium-emphasis">
+                  <div class="mb-2">Usuarios de prueba:</div>
+                  <div><strong>admin</strong> / admin123</div>
+                  <div><strong>user</strong> / user123</div>
+                  <div><strong>juan</strong> / juan123</div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
-    </div>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import authService from '@/services/authservice'
 
-const visible = ref(false)
+import UsuarioApp from '@/components/UsuarioApp.vue'
+
 const router = useRouter()
 
-function login() {
-  // Aquí podrías validar credenciales antes de navegar.
-  // Por ahora simulamos login guardando un flag en localStorage.
-  localStorage.setItem('auth', 'true')
+// Estado del formulario
+const username = ref('')
+const password = ref('')
+const showPassword = ref(false)
+const loading = ref(false)
+const error = ref('')
+const success = ref('')
+const form = ref(null)
 
-  // Si venimos de intentar acceder a una ruta protegida, redirigimos ahí
-  let after = null
-  try {
-    after = JSON.parse(localStorage.getItem('afterLogin') || 'null')
-  } catch (e) {
-    after = null
-  }
-
-  if (after && after.name) {
-    router.push(after)
-    localStorage.removeItem('afterLogin')
-  } else {
-    router.push('/dashboard')
-  }
+// Reglas de validación
+const rules = {
+  required: value => !!value || 'Este campo es requerido'
 }
+
+/**
+ * Maneja el proceso de login
+ */
+const handleLogin = async () => {
+  // Validar formulario
+  const { valid } = await form.value.validate()
+  if (!valid) return
+
+  // Limpiar mensajes anteriores
+  error.value = ''
+  success.value = ''
+  loading.value = true
+
+  try {
+    // Intentar autenticar
+    const result = await authService.login(username.value, password.value)
+
+    if (result.success) {
+      success.value = `¡Bienvenido ${result.user.nombre}!`
+      
+      // Redirigir al dashboard después de 1 segundo
+      setTimeout(() => {
+        router.push('/dashboard')
+      }, 1000)
+    } else {
+      error.value = result.message
+    }
+  } catch (err) {
+    error.value = 'Error inesperado. Por favor intente nuevamente.'
+    console.error('Error en login:', err)
+  } finally {
+    loading.value = false
+  }
+
+  
+}
+
+
 </script>
 
 <style scoped>
-.login-container {
-  background: linear-gradient(135deg, #E1F5FE 0%, #FFFFFF 100%);
+.fill-height {
   min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.fondoimagen {
-  background: linear-gradient(135deg, #4FC3F7, #87CEEB);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.fondo {
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.card-left {
-  background-color: #FFFFFF !important;
-  border: 2px solid #B3E5FC;
-  padding: 30px 20px;
-  min-height: 450px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.card-content {
-  background-color: #FFFFFF !important;
-  border: 2px solid #B3E5FC;
-  padding: 40px 30px;
-  min-height: 450px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.logo-img {
-  display: block;
-  margin: 0 auto;
-}
-
-:deep(.v-btn) {
-  background: linear-gradient(135deg, #4FC3F7, #87CEEB) !important;
-  color: #FFFFFF !important;
-}
-
-:deep(.v-field__outline) {
-  color: #B3E5FC !important;
-}
-
-:deep(.v-field--focused .v-field__outline) {
-  color: #4FC3F7 !important;
-}
-
-:deep(.v-icon) {
-  color: #4FC3F7 !important;
-}
-
-:deep(.text-blue) {
-  color: #01579B !important;
-}
-
-:deep(.v-card[color="surface-variant"]) {
-  background-color: #E1F5FE !important;
-  border: 1px solid #B3E5FC !important;
-}
-
-:deep(.text-medium-emphasis) {
-  color: #01579B !important;
-}
-
-/* Mejor contraste para textos */
-:deep(.v-card-text) {
-  color: #333333 !important;
-}
-
-:deep(.v-field input) {
-  color: #333333 !important;
-}
-
-:deep(.v-field .v-label) {
-  color: #01579B !important;
-}
-
-:deep(.v-card-title) {
-  color: #01579B !important;
-}
-
-@media (max-width: 960px) {
-  .card-left,
-  .card-content {
-    min-height: 400px;
-    padding: 30px 20px;
-  }
-  
-  .logo-img {
-    max-width: 180px !important;
-  }
+.v-card {
+  overflow: hidden;
 }
 </style>

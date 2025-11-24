@@ -18,7 +18,10 @@ declare module 'vue' {
     History: typeof import('./src/components/History.vue')['default']
     InstitucionalApp: typeof import('./src/components/InstitucionalApp.vue')['default']
     LoginApp: typeof import('./src/components/LoginApp.vue')['default']
+    LoginApp2: typeof import('./src/components/LoginApp2.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UsuarioApp: typeof import('./src/components/UsuarioApp.vue')['default']
+    Usuarios: typeof import('./src/components/Usuarios.vue')['default']
   }
 }
